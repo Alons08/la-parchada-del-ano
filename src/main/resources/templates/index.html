@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Parchada del Año - Evento de Boxeo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Precios de Entradas */
+        .entradas-precios {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .precio-tipo {
+            background: rgba(255,255,255,0.07);
+            border-radius: 14px;
+            padding: 1.2rem 2rem;
+            min-width: 140px;
+            text-align: center;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+            border: 1px solid rgba(255,255,255,0.13);
+        }
+        .precio-tipo.vip,
+        .precio-tipo.general {
+            border: 2px solid var(--accent);
+        }
+        .precio-tipo .tipo {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+        .precio-tipo.vip .tipo {
+            color: var(--accent);
+        }
+        .precio-tipo.general .tipo {
+            color: var(--primary);
+        }
+        .precio-tipo .monto {
+            font-size: 2.1rem;
+            font-weight: 900;
+            color: var(--light);
+            margin-bottom: 0.2rem;
+            letter-spacing: 2px;
+        }
+        @media (max-width: 768px) {
+        #customAlert .modal-content {
+            padding: 1.2rem 0.7rem !important;
+        }
+        #customAlert .btn {
+            margin-top: 0.8rem !important;
+            font-size: 1rem !important;
+            padding: 0.7rem 1.5rem !important;
+        }
+            .votacion {
+                margin-top: 0rem !important;
+                padding-top: 0rem !important;
+            }
+            .navbar {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.7rem 0.3rem;
+            }
+            .logo {
+                font-size: 1.3rem !important;
+                text-align: left !important;
+                padding-left: 0.5rem;
+            }
+            .nav-links {
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100vw;
+                background: rgba(15,23,42,0.98);
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 0.7rem !important;
+                padding: 1.2rem 1.5rem 1.2rem 1.5rem;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+                z-index: 2001;
+                display: none;
+            }
+            .nav-links.show {
+                display: flex !important;
+            }
+            .nav-links li {
+                width: 100%;
+            }
+            .nav-links a {
+                font-size: 1.1rem !important;
+                padding: 0.7rem 0.2rem;
+                width: 100%;
+                display: block;
+                text-align: left;
+            }
+            .hamburger {
+                display: block !important;
+                font-size: 1.7rem !important;
+                margin-right: 0.7rem;
+            }
+            /* Modal de Peleador - Responsive */
+            .modal-content {
+                padding: 1rem 0.3rem !important;
+                max-width: 98vw !important;
+                width: 98vw !important;
+            }
+            .modal-peleador img {
+                width: 120px !important;
+                height: 120px !important;
+                margin-bottom: 0.7rem !important;
+            }
+            .modal-peleador h3 {
+                font-size: 1.1rem !important;
+                margin-bottom: 0.3rem !important;
+            }
+            .modal-peleador .apodo {
+                font-size: 0.95rem !important;
+                margin-bottom: 0.7rem !important;
+            }
+            .modal-peleador p {
+                font-size: 0.95rem !important;
+                margin: 0.7rem 0 !important;
+            }
+            .modal-stats {
+                grid-template-columns: 1fr !important;
+                gap: 0.7rem !important;
+            }
+            .stat {
+                padding: 0.7rem !important;
+                font-size: 0.95rem !important;
+            }
+            .stat-value {
+                font-size: 1.1rem !important;
+            }
+            .stat-label {
+                font-size: 0.85rem !important;
+            }
+                        /* Modal de votación - Responsive */
+                        #voteModal .modal-content {
+                            padding: 1.2rem 0.7rem !important;
+                        }
+                        #voteModal #modalMessage {
+                            margin-bottom: 1.1rem !important;
+                        }
+                        #voteModal .btn,
+                        #voteModal .btn-secondary {
+                            padding: 0.55rem 1.1rem !important;
+                            font-size: 0.92rem !important;
+                            border-radius: 14px !important;
+                            min-width: 80px !important;
+                            margin-top: 0 !important;
+                        }
+                        #voteModal .btn-secondary {
+                            background: #64748b !important;
+                            color: #fff !important;
+                        }
+                        #voteModal .modal-content > div[style*="display: flex"] {
+                            gap: 0.6rem !important;
+                        }
+            .entradas-precios {
+                gap: 0.7rem;
+                #voteModal .btn,
+                #voteModal .btn-secondary {
+                    padding: 0.6rem 1.2rem !important;
+                    font-size: 0.95rem !important;
+                    border-radius: 16px !important;
+                    min-width: 90px !important;
+                    box-shadow: none !important;
+                }
+                #voteModal .btn-secondary {
+                    background: #64748b !important;
+                    color: #fff !important;
+                }
+            }
+            .precio-tipo {
+                padding: 0.7rem 0.8rem;
+                min-width: 110px;
+            }
+            .precio-tipo .tipo {
+                font-size: 0.95rem;
+            }
+            .precio-tipo .monto {
+                font-size: 1.3rem;
+            }
+        }
+        :root {
+            --primary: #dc2626;
+            --primary-dark: #b91c1c;
+            --secondary: #1e293b;
+            --accent: #f59e0b;
+            --accent-dark: #d97706;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --success: #10b981;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--light);
+            background: linear-gradient(135deg, var(--dark) 0%, var(--secondary) 100%);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+
+        /* Hero Section - CORREGIDO */
+        .hero {
+            min-height: 100vh;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('/images/hero-bg.jpg') center/cover;
+            /* Ajuste para que no quede tapado por el header fijo */
+            padding-top: 80px;
+            box-sizing: border-box;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.8rem, 6vw, 4.2rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1.1;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 2.5rem;
+            color: var(--light);
+            opacity: 0.9;
+        }
+
+        .event-info {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 2.5rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .event-info p {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .event-info p:last-child {
+            margin-bottom: 0;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.2rem;
+            border-radius: 12px;
+            min-width: 110px;
+            max-width: 110px;
+            flex: 1 1 110px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .countdown-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            display: block;
+            line-height: 1;
+        }
+
+        .countdown-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
+        }
+
+        .btn {
+        #customAlert .btn {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.95rem;
+            border-radius: 16px;
+            min-width: 90px;
+            box-shadow: none;
+        }
+        #customAlert .btn {
+            padding: 0.55rem 1.1rem !important;
+            font-size: 0.92rem !important;
+            border-radius: 14px !important;
+            min-width: 80px !important;
+            margin-top: 0 !important;
+        }
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 1.2rem 2.5rem;
+          background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+          color: white;
+          text-decoration: none;
+          border-radius: 50px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          transition: var(--transition);
+          border: none;
+          cursor: pointer;
+          box-shadow: var(--shadow);
+          font-size: 1.1rem;
+          white-space: normal;
+          word-break: break-word;
+          text-align: center;
+          line-height: 1.2;
+        }
+
+                /* Botones del modal de votación - Laptop/Desktop */
+                #voteModal .btn,
+                #voteModal .btn-secondary {
+                    padding: 0.7rem 1.5rem;
+                    font-size: 1rem;
+                    border-radius: 18px;
+                    min-width: 110px;
+                    box-shadow: none;
+                }
+                #voteModal .btn-secondary {
+                    background: #64748b;
+                    color: #fff;
+                }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-vote-1 {
+            background: linear-gradient(135deg, var(--primary) 0%, #dc2626 100%);
+            color: white;
+            border: none;
+        }
+        .btn-vote-2 {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            border: none;
+        }
+
+        /* Combates Section */
+        .section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* Combate Card */
+        .combate-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .combate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .combate-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .combate-header h3 {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .combate-body {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 2rem;
+          flex-wrap: wrap;
+        }
+
+        .peleador {
+            text-align: center;
+            flex: 1;
+            min-width: 280px;
+            max-width: 340px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .peleador-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 1.2rem;
+            border: 6px solid var(--accent);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--dark);
+        }
+
+        .peleador-image:hover {
+            transform: scale(1.08);
+            border-color: var(--primary);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+        }
+
+        .peleador-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .peleador-info h4 {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .peleador-info .apodo {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .record {
+            font-size: 1rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .vs {
+          font-size: 2rem;
+          font-weight: 800;
+          color: var(--primary);
+          margin: 0 1rem;
+          align-self: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+        }
+
+        /* Barra de Votación */
+        .votacion {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .votacion-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: nowrap;
+        }
+
+        .progress-bars {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .progress-bar-container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            height: 20px;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
+            position: relative;
+        }
+
+        .progress-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--light);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .votes-count {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            padding: 3rem 0 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        /* Modales */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--dark) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--primary);
+        }
+
+        .modal-peleador {
+            text-align: center;
+        }
+
+        .modal-peleador img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .modal-peleador h3 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-peleador .apodo {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .modal-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        /* Tarjeta de Entradas Mejorada */
+        .entradas-card {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--dark) 100%);
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
+            padding: 2.5rem 2rem;
+            margin: 2rem auto;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.18);
+            transition: var(--transition);
+        }
+        @media (min-width: 1024px) {
+            .entradas-card {
+                max-width: 700px;
+            }
+        }
+        .entradas-card h3 {
+            color: var(--accent);
+            margin-bottom: 1.2rem;
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+        .entradas-card p {
+            margin-bottom: 2rem;
+            font-size: 1.15rem;
+            color: var(--light);
+            opacity: 0.95;
+        }
+        .entradas-card .precio {
+            font-size: 3.2rem;
+            font-weight: 900;
+            color: var(--accent);
+            margin: 2rem 0;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.18);
+        }
+        .entradas-card .btn {
+            font-size: 1.15rem;
+            padding: 1.1rem 2.2rem;
+            margin-top: 1rem;
+        }
+        @media (max-width: 768px) {
+            .entradas-card {
+                padding: 1.2rem 0.7rem;
+                max-width: 98vw;
+            }
+            .entradas-card h3 {
+                font-size: 1.3rem;
+                margin-bottom: 0.7rem;
+            }
+            .entradas-card p {
+                font-size: 0.98rem;
+                margin-bottom: 1.2rem;
+            }
+            .entradas-card .precio {
+                font-size: 2.1rem;
+                margin: 1.2rem 0;
+            }
+            .entradas-card .btn {
+                font-size: 1rem;
+                padding: 0.7rem 1.2rem;
+                margin-top: 1.2rem !important;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .combate-card a.btn {
+                font-size: 1rem;
+                padding: 0.9rem 1.2rem;
+                min-width: 180px;
+                max-width: 90vw;
+                white-space: nowrap;
+                text-align: center;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .votacion-buttons {
+                flex-wrap: nowrap;
+                gap: 0.5rem;
+                width: 100%;
+                justify-content: center;
+            }
+            .btn {
+                font-size: 1rem;
+                padding: 0.9rem 1.8rem;
+                min-width: 140px;
+                max-width: 90vw;
+                white-space: normal;
+                word-break: break-word;
+                text-align: center;
+                border-radius: 40px;
+                line-height: 1.2;
+                box-sizing: border-box;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 4rem !important;
+            }
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .combate-body {
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .vs {
+                font-size: 1.3rem;
+                margin: 0 0.5rem;
+                align-self: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+            }
+
+            .peleador {
+                min-width: 120px;
+                max-width: 48vw;
+                padding: 0 2px;
+            }
+
+            .peleador-image {
+                width: 120px;
+                height: 120px;
+                border-width: 4px;
+            }
+
+            .peleador-info h4 {
+                font-size: 1rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+                display: block;
+            }
+
+            .apodo {
+                font-size: 1rem;
+            }
+
+            .record {
+                font-size: 0.85rem;
+            }
+
+            .vs {
+                font-size: 1.2rem;
+                margin: 0 0.5rem;
+            }
+
+            .progress-bar-container {
+                height: 22px !important;
+            }
+
+            .progress-label {
+                font-size: 0.9rem !important;
+            }
+
+            .hero {
+                min-height: 100vh;
+                height: 100vh;
+                padding-top: 80px;
+                background-position: center;
+                align-items: center;
+                justify-content: center;
+            }
+            .hero-content {
+                max-width: 95vw;
+                padding: 0 5px;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+                letter-spacing: 1px;
+            }
+            .hero p {
+                font-size: 1.1rem;
+            }
+            .event-info {
+                font-size: 0.95rem;
+                padding: 1rem;
+                max-width: 90%;
+            }
+            .countdown {
+                gap: 0.5rem;
+            }
+            .countdown-item {
+                min-width: 90px;
+                max-width: 90px;
+                flex: 1 1 90px;
+                padding: 0.7rem;
+                text-align: center;
+            }
+            .countdown-number {
+                font-size: 1.5rem;
+            }
+            .btn {
+                padding: 0.9rem 1.8rem;
+                font-size: 1rem;
+            }
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .modal-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Estados de carga */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">LA <span>PARCHADA</span></div>
+                <ul class="nav-links">
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#peleas-estelares">Peleas Estelares</a></li>
+                    <li><a href="#peleas-secundarias">Peleas Secundarias</a></li>
+                    <li><a href="#entradas">Entradas</a></li>
+                </ul>
+                <div class="hamburger">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="container">
+            <div class="hero-content fade-in-up">
+                <h1>LA PARCHADA DEL AÑO</h1>
+                <p>El evento de boxeo más esperado del 2026</p>
+                
+                <div class="event-info">
+                    <p><i class="fas fa-calendar-alt"></i> 14 de Febrero, 2026</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Estadio Nacional, Ciudad Capital</p>
+                </div>
+
+                <div class="countdown">
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="days">100</span>
+                        <span class="countdown-label">Días</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="hours">22</span>
+                        <span class="countdown-label">Horas</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="minutes">40</span>
+                        <span class="countdown-label">Minutos</span>
+                    </div>
+                </div>
+
+                <a href="#entradas" class="btn">
+                    <i class="fas fa-ticket-alt"></i> Comprar Entradas
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Peleas Estelares -->
+    <section class="section" id="peleas-estelares">
+        <div class="container">
+            <div class="section-title">
+                <h2>Peleas Estelares</h2>
+            </div>
+
+            <div th:each="combate : ${combatesEstelares}" class="combate-card fade-in-up">
+                <div class="combate-header">
+                    <h3 th:text="${combate.titulo}">Combate Estelar</h3>
+                    <p th:text="${'Fecha: ' + #temporals.format(combate.fechaCombate, 'dd/MM/yyyy') + ' - ' + combate.horaCombate}">
+                        Fecha: 14/02/2026 - 20:00
+                    </p>
+                </div>
+
+                <div class="combate-body">
+                    <!-- Peleador 1 -->
+                    <div class="peleador">
+                        <div class="peleador-image" 
+                             th:attr="onclick=|mostrarModalPeleador(${combate.peleador1.id})|"
+                             th:data-peleador-id="${combate.peleador1.id}">
+                       <img th:src="@{'/images/' + ${combate.peleador1.nombreImagen}}" 
+                           th:alt="${combate.peleador1.nombre}" 
+                           onerror="this.style.background='white'; this.src='';">
+                        </div>
+                        <div class="peleador-info">
+                            <h4 th:text="${combate.peleador1.nombre}">Nombre Peleador</h4>
+                            <div class="apodo" th:text="${combate.peleador1.apodo}">Apodo</div>
+                            <div class="record" 
+                                 th:text="${combate.peleador1.recordGanadas + '-' + combate.peleador1.recordPerdidas + '-' + combate.peleador1.recordEmpates}">
+                                Record: 0-0-0
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="vs">VS</div>
+
+                    <!-- Peleador 2 -->
+                    <div class="peleador">
+                        <div class="peleador-image" 
+                             th:attr="onclick=|mostrarModalPeleador(${combate.peleador2.id})|"
+                             th:data-peleador-id="${combate.peleador2.id}">
+                       <img th:src="@{'/images/' + ${combate.peleador2.nombreImagen}}" 
+                           th:alt="${combate.peleador2.nombre}"
+                           onerror="this.style.background='white'; this.src='';">
+                        </div>
+                        <div class="peleador-info">
+                            <h4 th:text="${combate.peleador2.nombre}">Nombre Peleador</h4>
+                            <div class="apodo" th:text="${combate.peleador2.apodo}">Apodo</div>
+                            <div class="record" 
+                                 th:text="${combate.peleador2.recordGanadas + '-' + combate.peleador2.recordPerdidas + '-' + combate.peleador2.recordEmpates}">
+                                Record: 0-0-0
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sistema de Votación CORREGIDO -->
+                <div class="votacion">
+                    <div class="votacion-buttons">
+                        <button class="btn btn-vote btn-vote-1" 
+                                th:data-combate-id="${combate.id}" 
+                                th:data-peleador-id="${combate.peleador1.id}" 
+                                th:data-peleador-nombre="${combate.peleador1.nombre}">
+                            <i class="fas fa-vote-yea"></i> Votar
+                        </button>
+                        <button class="btn btn-vote btn-vote-2" 
+                                th:data-combate-id="${combate.id}" 
+                                th:data-peleador-id="${combate.peleador2.id}" 
+                                th:data-peleador-nombre="${combate.peleador2.nombre}">
+                            <i class="fas fa-vote-yea"></i> Votar
+                        </button>
+                    </div>
+
+                    <div class="progress-bar-container" style="display: flex; height: 30px;">
+                        <div class="progress-bar" 
+                             th:id="'progress-' + ${combate.id} + '-1'" 
+                             th:style="'width: ' + (${estadisticasCombates[combate.id]?.porcentaje1} ?: 50) + '%; background: linear-gradient(90deg, var(--primary) 0%, #dc2626 100%); border-radius: 10px 0 0 10px; position: relative;'">
+                            <span class="progress-label" 
+                                  th:id="'progress-label-' + ${combate.id} + '-1'"
+                                  th:text="${estadisticasCombates[combate.id] != null && estadisticasCombates[combate.id].porcentaje1 != null ? estadisticasCombates[combate.id].porcentaje1 + '%': '50%'}"
+                                  style="left: 20px; right: auto; transform: translateY(-50%); position: absolute; top: 50%; font-size: 1.2rem; color: #fff; font-weight: 900; text-shadow: 2px 2px 6px rgba(0,0,0,0.7); letter-spacing: 1px;">
+                                  50%
+                            </span>
+                        </div>
+                        <div class="progress-bar" 
+                             th:id="'progress-' + ${combate.id} + '-2'" 
+                             th:style="'width: ' + (${estadisticasCombates[combate.id]?.porcentaje2} ?: 50) + '%; background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%); border-radius: 0 10px 10px 0; position: relative;'">
+                            <span class="progress-label" 
+                                  th:id="'progress-label-' + ${combate.id} + '-2'"
+                                  th:text="${estadisticasCombates[combate.id] != null && estadisticasCombates[combate.id].porcentaje2 != null ? estadisticasCombates[combate.id].porcentaje2 + '%': '50%'}"
+                                  style="right: 20px; left: auto; transform: translateY(-50%); position: absolute; top: 50%; font-size: 1.2rem; color: #fff; font-weight: 900; text-shadow: 2px 2px 6px rgba(0,0,0,0.7); letter-spacing: 1px;">
+                                  50%
+                            </span>
+                        </div>
+                    </div>
+                    <div class="votes-count" th:id="'votes-count-' + ${combate.id}">
+                        Total votos: <span th:id="'total-votes-' + ${combate.id}" th:text="${estadisticasCombates[combate.id]?.totalVotos} ?: 0">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Peleas Secundarias -->
+    <section class="section" id="peleas-secundarias" style="background: rgba(0,0,0,0.3);">
+        <div class="container">
+            <div class="section-title">
+                <h2>Peleas Secundarias</h2>
+            </div>
+
+            <div th:each="combate : ${combatesSecundarios}" class="combate-card fade-in-up">
+                <div class="combate-header">
+                    <h3 th:text="${combate.titulo}">Combate Secundario</h3>
+                    <p th:text="${'Fecha: ' + #temporals.format(combate.fechaCombate, 'dd/MM/yyyy') + ' - ' + combate.horaCombate}">
+                        Fecha: 14/02/2026 - 18:00
+                    </p>
+                </div>
+
+                <div class="combate-body">
+                    <!-- Peleador 1 -->
+                    <div class="peleador">
+                        <div class="peleador-image" 
+                             th:attr="onclick=|mostrarModalPeleador(${combate.peleador1.id})|"
+                             th:data-peleador-id="${combate.peleador1.id}">
+                       <img th:src="@{'/images/' + ${combate.peleador1.nombreImagen}}" 
+                           th:alt="${combate.peleador1.nombre}"
+                           onerror="this.style.background='white'; this.src='';">
+                        </div>
+                        <div class="peleador-info">
+                            <h4 th:text="${combate.peleador1.nombre}">Nombre Peleador</h4>
+                            <div class="apodo" th:text="${combate.peleador1.apodo}">Apodo</div>
+                            <div class="record" 
+                                 th:text="${combate.peleador1.recordGanadas + '-' + combate.peleador1.recordPerdidas + '-' + combate.peleador1.recordEmpates}">
+                                Record: 0-0-0
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="vs">VS</div>
+
+                    <!-- Peleador 2 -->
+                    <div class="peleador">
+                        <div class="peleador-image" 
+                             th:attr="onclick=|mostrarModalPeleador(${combate.peleador2.id})|"
+                             th:data-peleador-id="${combate.peleador2.id}">
+                       <img th:src="@{'/images/' + ${combate.peleador2.nombreImagen}}" 
+                           th:alt="${combate.peleador2.nombre}"
+                           onerror="this.style.background='white'; this.src='';">
+                        </div>
+                        <div class="peleador-info">
+                            <h4 th:text="${combate.peleador2.nombre}">Nombre Peleador</h4>
+                            <div class="apodo" th:text="${combate.peleador2.apodo}">Apodo</div>
+                            <div class="record" 
+                                 th:text="${combate.peleador2.recordGanadas + '-' + combate.peleador2.recordPerdidas + '-' + combate.peleador2.recordEmpates}">
+                                Record: 0-0-0
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sistema de Votación CORREGIDO -->
+                <div class="votacion">
+                    <div class="votacion-buttons">
+                        <button class="btn btn-vote btn-vote-1" 
+                                th:data-combate-id="${combate.id}" 
+                                th:data-peleador-id="${combate.peleador1.id}" 
+                                th:data-peleador-nombre="${combate.peleador1.nombre}">
+                            <i class="fas fa-vote-yea"></i> Votar
+                        </button>
+                        <button class="btn btn-vote btn-vote-2" 
+                                th:data-combate-id="${combate.id}" 
+                                th:data-peleador-id="${combate.peleador2.id}" 
+                                th:data-peleador-nombre="${combate.peleador2.nombre}">
+                            <i class="fas fa-vote-yea"></i> Votar
+                        </button>
+                    </div>
+
+                    <div class="progress-bar-container" style="display: flex; height: 30px;">
+                        <div class="progress-bar" th:id="'progress-' + ${combate.id} + '-1'" style="width: 50%; background: linear-gradient(90deg, var(--primary) 0%, #dc2626 100%); border-radius: 10px 0 0 10px; position: relative;">
+                            <span class="progress-label" th:id="'progress-label-' + ${combate.id} + '-1'" style="left: 20px; right: auto; transform: translateY(-50%); position: absolute; top: 50%; font-size: 1.2rem; color: #fff; font-weight: 900; text-shadow: 2px 2px 6px rgba(0,0,0,0.7); letter-spacing: 1px;">50%</span>
+                        </div>
+                        <div class="progress-bar" th:id="'progress-' + ${combate.id} + '-2'" style="width: 50%; background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%); border-radius: 0 10px 10px 0; position: relative;">
+                            <span class="progress-label" th:id="'progress-label-' + ${combate.id} + '-2'" style="right: 20px; left: auto; transform: translateY(-50%); position: absolute; top: 50%; font-size: 1.2rem; color: #fff; font-weight: 900; text-shadow: 2px 2px 6px rgba(0,0,0,0.7); letter-spacing: 1px;">50%</span>
+                        </div>
+                    </div>
+                    <div class="votes-count" th:id="'votes-count-' + ${combate.id}">
+                        Total votos: <span th:id="'total-votes-' + ${combate.id}">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Entradas -->
+    <section class="section" id="entradas">
+        <div class="container">
+            <div class="section-title">
+                <h2>Entradas</h2>
+            </div>
+            
+            <div class="entradas-card">
+                <h3>¡No te quedes fuera!</h3>
+                <p>
+                    Asegura tu lugar para el evento de boxeo más espectacular del año.<br>
+                    Vive la emoción en vivo y apoya a tu peleador favorito.
+                </p>
+                <div class="entradas-precios">
+                    <div class="precio-tipo vip">
+                        <div class="tipo">VIP</div>
+                        <div class="monto">S/ 120.00</div>
+                    </div>
+                    <div class="precio-tipo general">
+                        <div class="tipo">GENERAL</div>
+                        <div class="monto">S/ 50.00</div>
+                    </div>
+                </div>
+                <a href="https://wa.me/573001234567?text=Hola,%20me%20interesa%20comprar%20entradas%20para%20'La%20Parchada%20del%20Año'" 
+                   class="btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> COMPRAR
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">LA <span>PARCHADA</span></div>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2026 La Parchada del Año. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal de Votación -->
+    <div class="modal" id="voteModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h3 style="color: var(--accent); margin-bottom: 1rem; text-align: center;">Confirmar Voto</h3>
+            <p id="modalMessage" style="text-align: center; margin-bottom: 2rem;">
+                ¿Estás seguro de que quieres votar por <span id="fighterName" style="color: var(--accent); font-weight: 700;"></span>?
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <button class="btn" id="confirmVote">Confirmar Voto</button>
+                <button class="btn btn-secondary" id="cancelVote">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Información del Peleador -->
+    <div class="modal" id="peleadorModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-peleador" id="peleadorModalContent">
+                <!-- Contenido dinámico se insertará aquí -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let selectedCombateId = '';
+        let selectedPeleadorId = '';
+        let selectedPeleadorNombre = '';
+
+        // Inicialización cuando el DOM está listo
+        document.addEventListener('DOMContentLoaded', function() {
+            inicializarEventListeners();
+            actualizarEstadisticasCombates();
+            setInterval(actualizarEstadisticasCombates, 10000); // Actualizar cada 10 segundos
+        });
+
+        function inicializarEventListeners() {
+            // Navegación móvil
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (hamburger) {
+                hamburger.addEventListener('click', () => {
+                    navLinks.classList.toggle('show');
+                });
+            }
+
+            // Smooth scrolling y ocultar menú móvil al navegar
+            document.querySelectorAll('.nav-links a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                    // Oculta el menú móvil después de navegar
+                    navLinks.classList.remove('show');
+                });
+            });
+
+            // Sistema de votación
+            document.querySelectorAll('.btn-vote').forEach(button => {
+                button.addEventListener('click', function() {
+                    selectedCombateId = this.getAttribute('data-combate-id');
+                    selectedPeleadorId = this.getAttribute('data-peleador-id');
+                    selectedPeleadorNombre = this.getAttribute('data-peleador-nombre');
+                    
+                    console.log('Voto seleccionado:', {
+                        combateId: selectedCombateId,
+                        peleadorId: selectedPeleadorId,
+                        peleadorNombre: selectedPeleadorNombre
+                    });
+                    
+                    document.getElementById('fighterName').textContent = selectedPeleadorNombre;
+                    document.getElementById('voteModal').style.display = 'flex';
+                });
+            });
+
+            // Modal de votación
+            document.getElementById('confirmVote').addEventListener('click', confirmarVoto);
+            document.getElementById('cancelVote').addEventListener('click', () => {
+                document.getElementById('voteModal').style.display = 'none';
+            });
+
+            // Cerrar modales
+            document.querySelectorAll('.close-modal').forEach(button => {
+                button.addEventListener('click', function() {
+                    this.closest('.modal').style.display = 'none';
+                });
+            });
+
+            // Cerrar modal al hacer clic fuera
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Contador regresivo
+        function updateCountdown() {
+            const eventDate = new Date('February 14, 2026 20:00:00').getTime();
+            const now = new Date().getTime();
+            const timeLeft = eventDate - now;
+
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+
+            if (timeLeft < 0) {
+                clearInterval(countdownInterval);
+                document.querySelector('.countdown').innerHTML = '<h3 style="color: var(--accent);">¡El evento ha comenzado!</h3>';
+            }
+        }
+
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Función para confirmar voto
+        async function confirmarVoto() {
+            const modal = document.getElementById('voteModal');
+            const confirmBtn = document.getElementById('confirmVote');
+            
+            console.log('Enviando voto:', {
+                combateId: selectedCombateId,
+                peleadorId: selectedPeleadorId,
+                peleadorNombre: selectedPeleadorNombre
+            });
+            
+            try {
+                confirmBtn.disabled = true;
+                confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Votando...';
+                
+                const response = await fetch('/votar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `combateId=${selectedCombateId}&peleadorId=${selectedPeleadorId}`
+                });
+
+                const result = await response.text();
+                console.log('Respuesta del servidor:', result);
+                
+                if (response.ok) {
+                    showCustomAlert('¡Voto registrado!', `¡Has votado por ${selectedPeleadorNombre}! Gracias por tu participación.`);
+                    await actualizarEstadisticasCombate(selectedCombateId);
+                } else {
+                    showCustomAlert('Voto no permitido', result.replace('error: ', ''));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showCustomAlert('Error', 'Error al registrar el voto');
+            } finally {
+                confirmBtn.disabled = false;
+                confirmBtn.innerHTML = 'Confirmar Voto';
+            }
+        }
+
+// Cierra el modal de votación
+function closeVoteModal() {
+    var modal = document.getElementById('voteModal');
+    if (modal) modal.style.display = 'none';
+}
+
+// Muestra el alert personalizado
+function showCustomAlert(title, message) {
+    closeVoteModal();
+    document.getElementById('customAlertTitle').textContent = title;
+    document.getElementById('customAlertMessage').textContent = message;
+    document.getElementById('customAlert').style.display = 'flex';
+}
+
+// Cierra el alert personalizado
+function closeCustomAlert() {
+    document.getElementById('customAlert').style.display = 'none';
+}
+
+        // Función para actualizar estadísticas de un combate específico con datos reales
+        async function actualizarEstadisticasCombate(combateId) {
+            try {
+                const response = await fetch(`/estadisticas/${combateId}`);
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status}`);
+                }
+                const estadisticas = await response.json();
+                if (estadisticas && typeof estadisticas.porcentaje1 !== 'undefined') {
+                    actualizarUIEstadisticas(combateId, estadisticas);
+                    console.log(`Combate ${combateId} actualizado:`, {
+                        peleador1: `${estadisticas.votosPeleador1} votos (${estadisticas.porcentaje1}%)`,
+                        peleador2: `${estadisticas.votosPeleador2} votos (${estadisticas.porcentaje2}%)`,
+                        total: estadisticas.totalVotos
+                    });
+                } else {
+                    console.warn(`Datos de estadísticas inválidos para combate ${combateId}`);
+                }
+            } catch (error) {
+                console.error('Error actualizando estadísticas del combate', combateId, ':', error);
+            }
+        }
+
+        // Función para actualizar estadísticas de todos los combates con datos reales
+        async function actualizarEstadisticasCombates() {
+            try {
+                const response = await fetch('/estadisticas');
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status}`);
+                }
+                const todasEstadisticas = await response.json();
+                document.querySelectorAll('.combate-card').forEach(card => {
+                    const combateId = card.querySelector('.btn-vote').getAttribute('data-combate-id');
+                    if (combateId && todasEstadisticas[combateId]) {
+                        actualizarUIEstadisticas(combateId, todasEstadisticas[combateId]);
+                    }
+                });
+                console.log('Todas las estadísticas actualizadas:', todasEstadisticas);
+            } catch (error) {
+                console.error('Error actualizando todas las estadísticas:', error);
+            }
+        }
+
+        // Función auxiliar para actualizar la UI con las estadísticas
+        function actualizarUIEstadisticas(combateId, estadisticas) {
+            const progress1 = document.getElementById(`progress-${combateId}-1`);
+            const progress2 = document.getElementById(`progress-${combateId}-2`);
+            const label1 = document.getElementById(`progress-label-${combateId}-1`);
+            const label2 = document.getElementById(`progress-label-${combateId}-2`);
+            const totalSpan = document.getElementById(`total-votes-${combateId}`);
+
+            if (progress1 && progress2 && label1 && label2 && totalSpan) {
+                progress1.style.width = `${estadisticas.porcentaje1}%`;
+                progress2.style.width = `${estadisticas.porcentaje2}%`;
+                label1.textContent = `${estadisticas.porcentaje1}%`;
+                label2.textContent = `${estadisticas.porcentaje2}%`;
+                totalSpan.textContent = estadisticas.totalVotos;
+            }
+        }
+
+        // Función para mostrar modal del peleador
+        async function mostrarModalPeleador(peleadorId) {
+            try {
+                const modal = document.getElementById('peleadorModal');
+                const content = document.getElementById('peleadorModalContent');
+                content.innerHTML = '<div style="text-align:center;padding:2rem"><i class="fas fa-spinner fa-spin fa-2x"></i><br>Cargando...</div>';
+                modal.style.display = 'flex';
+
+                const response = await fetch(`/peleador/${peleadorId}`);
+                if (!response.ok) {
+                    content.innerHTML = '<div style="text-align:center;color:red">No se encontró el peleador.</div>';
+                    return;
+                }
+                const peleador = await response.json();
+                function safe(val) {
+                    return (val !== undefined && val !== null && val !== '' ? val : '-');
+                }
+                content.innerHTML = `
+                    <div class="modal-peleador">
+                        <img src="/images/${safe(peleador.nombreImagen)}" alt="${safe(peleador.nombre)}" onerror="this.src='/images/placeholder.jpg'">
+                        <h3 style="color:var(--accent);">${safe(peleador.nombre)}</h3>
+                        <div class="apodo" style="color:var(--primary);font-weight:700;">${safe(peleador.apodo)}</div>
+                        <p style="margin: 1rem 0; color: var(--gray);">
+                            ${safe(peleador.descripcion)}
+                        </p>
+                        <div class="modal-stats">
+                            <div class="stat">
+                                <div class="stat-value">${safe(peleador.edad)}</div>
+                                <div class="stat-label">Edad</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${safe(peleador.peso)}</div>
+                                <div class="stat-label">Peso (kg)</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${safe(peleador.recordGanadas)}-${safe(peleador.recordPerdidas)}-${safe(peleador.recordEmpates)}</div>
+                                <div class="stat-label">Récord</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${safe(peleador.chala) == '-' ? '-' : safe(peleador.chala) + ' cm'}</div>
+                                <div class="stat-label">Chala</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error cargando información del peleador:', error);
+                content.innerHTML = '<div style="text-align:center;color:red">Error al cargar la información.</div>';
+            }
+        }
+
+        // Inicializar estadísticas al cargar
+        window.addEventListener('load', () => {
+            setTimeout(actualizarEstadisticasCombates, 1000);
+        });
+    </script>
+        <!-- Modal de alerta personalizado -->
+        <div id="customAlert" class="modal" style="display:none;">
+            <div class="modal-content" style="text-align:center;">
+                <span class="close-modal" onclick="closeCustomAlert()">&times;</span>
+                <h3 id="customAlertTitle" style="color:var(--accent);margin-bottom:1rem;"></h3>
+                <p id="customAlertMessage" style="color:var(--light);"></p>
+                <button class="btn" onclick="closeCustomAlert()" style="margin-top:1.5rem;">Aceptar</button>
+            </div>
+        </div>
+</body>
+</html>
