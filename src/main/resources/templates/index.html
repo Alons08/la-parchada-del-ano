@@ -35,7 +35,7 @@
             letter-spacing: 1px;
         }
         .precio-tipo.vip .tipo {
-            color: var(--accent);
+            color: var(--primary);
         }
         .precio-tipo.general .tipo {
             color: var(--primary);
@@ -189,7 +189,8 @@
             }
         }
         :root {
-            --primary: #dc2626;
+            --primary: #dc2626; /* Rojo solo para peleas */
+            --button-main: #f59e0b; /* Dorado/accent para botones generales */
             --primary-dark: #b91c1c;
             --secondary: #1e293b;
             --accent: #f59e0b;
@@ -243,13 +244,15 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 800;
-            color: var(--accent);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
 
         .logo span {
-            color: var(--primary);
+            color: inherit;
         }
 
         .nav-links {
@@ -408,7 +411,7 @@
           align-items: center;
           gap: 0.5rem;
           padding: 1.2rem 2.5rem;
-          background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+          background: linear-gradient(135deg, var(--button-main) 0%, var(--accent-dark) 100%);
           color: white;
           text-decoration: none;
           border-radius: 50px;
@@ -551,9 +554,19 @@
 
         .peleador-image:hover {
             transform: scale(1.08);
-            border-color: var(--primary);
             box-shadow: 0 16px 40px rgba(0,0,0,0.35);
         }
+
+        /* Hover color para peleador izquierdo (rojo) */
+        .peleador:first-child .peleador-image:hover {
+            border-color: #dc2626;
+        }
+
+        /* Hover color para peleador derecho (azul) */
+        .peleador:last-child .peleador-image:hover {
+            border-color: #2563eb;
+        }
+        
 
         .peleador-image img {
             width: 100%;
@@ -704,7 +717,7 @@
         .copyright {
             text-align: center;
             margin-top: 2rem;
-            color: var(--gray);
+            color: var(--accent);
             font-size: 0.875rem;
         }
 
@@ -762,6 +775,19 @@
             object-fit: cover;
             border: 4px solid var(--primary);
             margin-bottom: 1rem;
+        }
+        .modal-peleador img.borde-rojo {
+            border-color: #dc2626 !important;
+        }
+        .modal-peleador img.borde-azul {
+            border-color: #2563eb !important;
+        }
+        .modal-peleador .apodo.rojo {
+            color: #dc2626 !important;
+        }
+        .modal-peleador .apodo.azul {
+            color: #2563eb !important;
+        }
         }
 
         .modal-peleador h3 {
@@ -843,6 +869,7 @@
             font-size: 1.15rem;
             padding: 1.1rem 2.2rem;
             margin-top: 1rem;
+            background: linear-gradient(135deg, var(--button-main) 0%, var(--accent-dark) 100%) !important;
         }
         @media (max-width: 768px) {
             .entradas-card {
@@ -1058,6 +1085,50 @@
             transform: none !important;
         }
     </style>
+        <style>
+            /* Botón flotante Kick */
+            .kick-float-btn {
+                position: fixed;
+                bottom: 32px;
+                right: 32px;
+                z-index: 3000;
+                background: linear-gradient(135deg, #53fc19 0%, #35363a 100%);
+                color: #242428;
+                border: 2px solid #53fc19;
+                border-radius: 50px;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+                font-weight: 800;
+                font-size: 1rem;
+                padding: 0.6rem 1.3rem;
+                display: flex;
+                align-items: center;
+                gap: 0.7rem;
+                cursor: pointer;
+                transition: all 0.2s;
+                text-decoration: none;
+            }
+            .kick-float-btn:hover {
+                background: linear-gradient(135deg, #35363a 0%, #53fc19 100%);
+                color: #53fc19;
+                border-color: #35363a;
+            }
+            .kick-float-btn .kick-icon {
+                font-size: 1.5rem;
+                color: #53fc19;
+            }
+            @media (max-width: 768px) {
+                .kick-float-btn {
+                    bottom: 70px;
+                    right: 10px;
+                    font-size: 0.95rem;
+                    padding: 0.5rem 1.1rem;
+                    border-radius: 30px;
+                }
+                .kick-float-btn .kick-icon {
+                    font-size: 1.1rem;
+                }
+            }
+        </style>
 </head>
 <body>
     <!-- Header -->
@@ -1330,7 +1401,7 @@
                     </div>
                 </div>
                 <a href="https://wa.me/573001234567?text=Hola,%20me%20interesa%20comprar%20entradas%20para%20'La%20Parchada%20del%20Año'" 
-                   class="btn" target="_blank">
+                   class="btn" target="_blank" style="background: linear-gradient(135deg, var(--button-main) 0%, var(--accent-dark) 100%) !important;">
                     <i class="fab fa-whatsapp"></i> COMPRAR
                 </a>
             </div>
@@ -1611,7 +1682,7 @@ function closeCustomAlert() {
             try {
                 const modal = document.getElementById('peleadorModal');
                 const content = document.getElementById('peleadorModalContent');
-                content.innerHTML = '<div style="text-align:center;padding:2rem"><i class="fas fa-spinner fa-spin fa-2x"></i><br>Cargando...</div>';
+                content.innerHTML = `<div style="text-align:center;padding:2rem"><i class="fas fa-spinner fa-spin fa-2x"></i><br>Cargando...</div>`;
                 modal.style.display = 'flex';
 
                 const response = await fetch(`/peleador/${peleadorId}`);
@@ -1623,11 +1694,30 @@ function closeCustomAlert() {
                 function safe(val) {
                     return (val !== undefined && val !== null && val !== '' ? val : '-');
                 }
+                // Determinar si es peleador1 (izquierda) o peleador2 (derecha)
+                let colorBorde = 'borde-rojo', colorApodo = 'rojo';
+                // Buscar en la tarjeta actual si el peleador es el primero o segundo
+                const combateCards = document.querySelectorAll('.combate-card');
+                let encontrado = false;
+                combateCards.forEach(card => {
+                    if (encontrado) return;
+                    const peleador1Id = card.querySelector('.peleador .peleador-image')?.getAttribute('data-peleador-id');
+                    const peleador2Id = card.querySelectorAll('.peleador .peleador-image')[1]?.getAttribute('data-peleador-id');
+                    if (peleador1Id == peleadorId) {
+                        colorBorde = 'borde-rojo';
+                        colorApodo = 'rojo';
+                        encontrado = true;
+                    } else if (peleador2Id == peleadorId) {
+                        colorBorde = 'borde-azul';
+                        colorApodo = 'azul';
+                        encontrado = true;
+                    }
+                });
                 content.innerHTML = `
                     <div class="modal-peleador">
-                        <img src="/images/${safe(peleador.nombreImagen)}" alt="${safe(peleador.nombre)}" onerror="this.src='/images/placeholder.jpg'">
+                        <img src="/images/${safe(peleador.nombreImagen)}" alt="${safe(peleador.nombre)}" onerror="this.src='/images/placeholder.jpg'" class="${colorBorde}">
                         <h3 style="color:var(--accent);">${safe(peleador.nombre)}</h3>
-                        <div class="apodo" style="color:var(--primary);font-weight:700;">${safe(peleador.apodo)}</div>
+                        <div class="apodo ${colorApodo}" style="font-weight:700;">${safe(peleador.apodo)}</div>
                         <p style="margin: 1rem 0; color: var(--gray);">
                             ${safe(peleador.descripcion)}
                         </p>
@@ -1671,5 +1761,11 @@ function closeCustomAlert() {
                 <button class="btn" onclick="closeCustomAlert()" style="margin-top:1.5rem;">Aceptar</button>
             </div>
         </div>
+
+            <!-- Botón flotante Kick -->
+            <a href="https://kick.com/shuls_off" class="kick-float-btn" target="_blank" rel="noopener" title="Ver en vivo en Kick">
+                <span class="kick-icon"><i class="fa-brands fa-kickstarter-k"></i></span>
+                En vivo
+            </a>
 </body>
 </html>
