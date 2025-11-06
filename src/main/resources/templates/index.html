@@ -493,8 +493,8 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 2rem;
-            margin: 1.5rem 0;
+            padding: 1.2rem 1rem;
+            margin: 0.8rem 0;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: var(--shadow);
             transition: var(--transition);
@@ -507,7 +507,7 @@
 
         .combate-header {
             text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.7rem;
         }
 
         .combate-header h3 {
@@ -536,11 +536,11 @@
         }
 
         .peleador-image {
-            width: 200px;
-            height: 200px;
+            width: 170px;
+            height: 170px;
             border-radius: 50%;
             overflow: hidden;
-            margin: 0 auto 1.2rem;
+            margin: 0 auto 0.7rem;
             border: 6px solid var(--accent);
             box-shadow: 0 8px 32px rgba(0,0,0,0.25);
             position: relative;
@@ -565,7 +565,7 @@
         .peleador-info h4 {
             font-size: 1.5rem;
             color: var(--accent);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
             font-weight: 800;
             letter-spacing: 1px;
         }
@@ -573,27 +573,39 @@
         .peleador-info .apodo {
             color: var(--primary);
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.18rem;
             font-size: 1.1rem;
         }
 
         .record {
             font-size: 1rem;
             color: var(--gray);
-            margin-bottom: 1rem;
+            margin-bottom: 0.18rem;
         }
 
         .vs {
           font-size: 2rem;
           font-weight: 800;
           color: var(--primary);
-          margin: 0 1rem;
+          margin: 0 0.5rem;
           align-self: center;
           display: flex;
           align-items: center;
           justify-content: center;
           height: 100%;
         }
+
+            /* Fix VS orientation on mobile */
+            @media (max-width: 768px) {
+                .vs {
+                    font-size: 1.5rem;
+                    margin: 0.5rem 0;
+                    transform: none !important;
+                    writing-mode: horizontal-tb !important;
+                    display: block;
+                    text-align: center;
+                }
+            }
 
         /* Barra de Votación */
         .votacion {
@@ -644,12 +656,12 @@
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         }
 
-        .votes-count {
-            text-align: center;
-            margin-top: 0.5rem;
-            font-size: 0.875rem;
-            color: var(--gray);
-        }
+            .votes-count {
+                text-align: center;
+                margin-top: 0.3rem;
+                font-size: 1rem;
+                color: var(--gray);
+            }
 
         /* Footer */
         footer {
@@ -856,12 +868,85 @@
             }
         }
 
-        /* Responsive */
+        /* Responsive - CORREGIDO */
         @media (max-width: 768px) {
-            .combate-card a.btn {
+            /* Combate Card Mobile */
+            .combate-card {
+                padding: 0.15rem 0.05rem;
+                margin: 0.2rem 0;
+            }
+            
+            .combate-header h3 {
+                font-size: 1.1rem;
+                margin-bottom: 0.05rem;
+            }
+            
+            .combate-body {
+                flex-direction: column;
+                gap: 0.1rem;
+            }
+            
+            .peleador {
+                min-width: 100%;
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .peleador-image {
+                width: 110px;
+                height: 110px;
+                margin-bottom: 0.25rem;
+            }
+            
+            .peleador-info h4 {
+                font-size: 1.15rem;
+                margin-bottom: 0.15rem;
+            }
+            
+            .peleador-info .apodo {
                 font-size: 1rem;
-                padding: 0.9rem 1.2rem;
-                min-width: 180px;
+                margin-bottom: 0.12rem;
+            }
+            
+            .record {
+                font-size: 0.95rem;
+                margin-bottom: 0.12rem;
+            }
+            
+            .vs {
+                font-size: 1rem;
+                margin: 0.08rem 0;
+                transform: rotate(90deg);
+            }
+            
+            /* Botones de votación en móvil */
+            .votacion-buttons {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                width: 100%;
+            }
+            
+            .btn-vote {
+                flex: 1;
+                min-width: 120px;
+                padding: 0.7rem 1rem !important;
+                font-size: 0.9rem;
+                white-space: nowrap;
+            }
+            
+            .progress-bar-container {
+                height: 20px !important;
+            }
+            
+            .progress-label {
+                font-size: 0.75rem !important;
+            }
+            
+            /* Botones generales en móvil */
+            .combate-card a.btn {
+                font-size: 0.95rem;
+                padding: 0.7rem 1rem;
+                min-width: 120px;
                 max-width: 90vw;
                 white-space: nowrap;
                 text-align: center;
@@ -869,16 +954,11 @@
                 justify-content: center;
                 align-items: center;
             }
-            .votacion-buttons {
-                flex-wrap: nowrap;
-                gap: 0.5rem;
-                width: 100%;
-                justify-content: center;
-            }
+            
             .btn {
-                font-size: 1rem;
-                padding: 0.9rem 1.8rem;
-                min-width: 140px;
+                font-size: 0.95rem;
+                padding: 0.7rem 1.2rem;
+                min-width: 120px;
                 max-width: 90vw;
                 white-space: normal;
                 word-break: break-word;
@@ -889,72 +969,15 @@
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                margin-top: 4rem !important;
+                margin-top: 2rem !important;
             }
+            
             .nav-links {
                 display: none;
             }
 
             .hamburger {
                 display: block;
-            }
-
-            .combate-body {
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-                gap: 0.5rem;
-            }
-            .vs {
-                font-size: 1.3rem;
-                margin: 0 0.5rem;
-                align-self: center;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 100%;
-            }
-
-            .peleador {
-                min-width: 120px;
-                max-width: 48vw;
-                padding: 0 2px;
-            }
-
-            .peleador-image {
-                width: 120px;
-                height: 120px;
-                border-width: 4px;
-            }
-
-            .peleador-info h4 {
-                font-size: 1rem;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                max-width: 100%;
-                display: block;
-            }
-
-            .apodo {
-                font-size: 1rem;
-            }
-
-            .record {
-                font-size: 0.85rem;
-            }
-
-            .vs {
-                font-size: 1.2rem;
-                margin: 0 0.5rem;
-            }
-
-            .progress-bar-container {
-                height: 22px !important;
-            }
-
-            .progress-label {
-                font-size: 0.9rem !important;
             }
 
             .hero {
@@ -1116,7 +1139,7 @@
                         </div>
                         <div class="peleador-info">
                             <h4 th:text="${combate.peleador1.nombre}">Nombre Peleador</h4>
-                            <div class="apodo" th:text="${combate.peleador1.apodo}">Apodo</div>
+                            <div class="apodo" th:text="${combate.peleador1.apodo}" style="color: #dc2626; font-weight: 700;">Apodo</div>
                             <div class="record" 
                                  th:text="${combate.peleador1.recordGanadas + '-' + combate.peleador1.recordPerdidas + '-' + combate.peleador1.recordEmpates}">
                                 Record: 0-0-0
@@ -1137,7 +1160,7 @@
                         </div>
                         <div class="peleador-info">
                             <h4 th:text="${combate.peleador2.nombre}">Nombre Peleador</h4>
-                            <div class="apodo" th:text="${combate.peleador2.apodo}">Apodo</div>
+                            <div class="apodo" th:text="${combate.peleador2.apodo}" style="color: #2563eb; font-weight: 700;">Apodo</div>
                             <div class="record" 
                                  th:text="${combate.peleador2.recordGanadas + '-' + combate.peleador2.recordPerdidas + '-' + combate.peleador2.recordEmpates}">
                                 Record: 0-0-0
@@ -1220,7 +1243,7 @@
                         </div>
                         <div class="peleador-info">
                             <h4 th:text="${combate.peleador1.nombre}">Nombre Peleador</h4>
-                            <div class="apodo" th:text="${combate.peleador1.apodo}">Apodo</div>
+                            <div class="apodo" th:text="${combate.peleador1.apodo}" style="color: #dc2626; font-weight: 700;">Apodo</div>
                             <div class="record" 
                                  th:text="${combate.peleador1.recordGanadas + '-' + combate.peleador1.recordPerdidas + '-' + combate.peleador1.recordEmpates}">
                                 Record: 0-0-0
@@ -1241,7 +1264,7 @@
                         </div>
                         <div class="peleador-info">
                             <h4 th:text="${combate.peleador2.nombre}">Nombre Peleador</h4>
-                            <div class="apodo" th:text="${combate.peleador2.apodo}">Apodo</div>
+                            <div class="apodo" th:text="${combate.peleador2.apodo}" style="color: #2563eb; font-weight: 700;">Apodo</div>
                             <div class="record" 
                                  th:text="${combate.peleador2.recordGanadas + '-' + combate.peleador2.recordPerdidas + '-' + combate.peleador2.recordEmpates}">
                                 Record: 0-0-0
