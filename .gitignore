@@ -1,3 +1,4 @@
+src/main/java/com/alocode/la_parchada_del_ano/config/DataInitializer.java
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
