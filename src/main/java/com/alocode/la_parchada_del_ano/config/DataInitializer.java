@@ -22,23 +22,23 @@ public class DataInitializer {
 		if (peleadorRepository.count() == 0) {
 			// Crear peleadores
 			Peleador peleador1 = new Peleador();
-			peleador1.setNombre("Juan Pérez");
-			peleador1.setApodo("El Martillo");
-			peleador1.setDescripcion("Campeón nacional, famoso por su pegada.");
+			peleador1.setNombre("Shuls");
+			peleador1.setApodo("Toro");
+			peleador1.setDescripcion("Campero profesional y padre de Aitana.");
 			peleador1.setPeso(75.0);
 			peleador1.setEdad(28);
-			peleador1.setNombreImagen("juan_perez.jpg");
+			peleador1.setNombreImagen("shuls.jpg");
 			peleador1.setRecordGanadas(20);
 			peleador1.setRecordPerdidas(2);
 			peleador1.setActivo(true);
 
 			Peleador peleador2 = new Peleador();
-			peleador2.setNombre("Carlos Ramírez");
-			peleador2.setApodo("El Relámpago");
-			peleador2.setDescripcion("Rápido y ágil, experto en defensa.");
+			peleador2.setNombre("Carlos Waller");
+			peleador2.setApodo("Pantene");
+			peleador2.setDescripcion("Conocido por tener más panza que p3n3.");
 			peleador2.setPeso(74.5);
 			peleador2.setEdad(26);
-			peleador2.setNombreImagen("carlos_ramirez.jpg");
+			peleador2.setNombreImagen("carlos_waller.jpg");
 			peleador2.setRecordGanadas(18);
 			peleador2.setRecordPerdidas(3);
 			peleador2.setActivo(true);
@@ -72,7 +72,7 @@ public class DataInitializer {
 
 			// Crear pelea estelar
 			Combate estelar = new Combate();
-			estelar.setTitulo("Pelea Estelar: El Martillo vs El Relámpago");
+			estelar.setTitulo("Pelea Estelar: Shuls vs Waller");
 			estelar.setPeleador1(peleador1);
 			estelar.setPeleador2(peleador2);
 			estelar.setFechaCombate(LocalDateTime.of(2026, 2, 14, 20, 0));
